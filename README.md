@@ -1,4 +1,3 @@
-Super idol
 
 <!DOCTYPE html>
 <html lang="pt-BR" class="select-none touch-none overflow-hidden w-full h-full">
@@ -8,6 +7,7 @@ Super idol
     <title>VECK.IO - Cyber Neon Battle (Fixed Multiplayer)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com"></script>
     <!-- FontAwesome para Ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -40,110 +40,81 @@ Super idol
         };
     </script>
 
-   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;700&display=swap');
 
-    // Environment variables setup
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'veck-io-game';
-    const firebaseConfig = typeof __firebase_config !== 'undefined' 
-        ? JSON.parse(__firebase_config) 
-        : {
-            apiKey: "AIzaSyDummyKeyForFallbackOnly",
-            authDomain: "demo-app.firebaseapp.com",
-            projectId: "demo-app",
-            storageBucket: "demo-app.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:abcdef"
-        };
+        * {
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: none;
+        }
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app); // Fixed the auth initialization
+        body, html {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: #030308;
+            color: #fff;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+        }
 
-    window.FirebaseServices = {
-        app, db, auth, appId,
-        doc, getDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, addDoc,
-        signInAnonymously, signInWithCustomToken, onAuthStateChanged
-    };
-</script>
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
 
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;700&display=swap');
+        .neon-glow-cyan {
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4), inset 0 0 15px rgba(0, 243, 255, 0.2);
+            text-shadow: 0 0 8px rgba(0, 243, 255, 0.8);
+        }
 
-    * {
-        user-select: none;
-        -webkit-user-select: none;
-        -webkit-touch-callout: none;
-        -webkit-tap-highlight-color: transparent;
-        touch-action: none;
-    }
+        .glass-panel {
+            background: rgba(10, 12, 24, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 243, 255, 0.25);
+        }
 
-    body, html {
-        font-family: 'Rajdhani', sans-serif;
-        background-color: #030308;
-        color: #fff;
-        overflow: hidden;
-        margin: 0;
-        padding: 0;
-        width: 100vw;
-        height: 100vh;
-        position: fixed;
-    }
+        .joystick-base {
+            background: rgba(0, 243, 255, 0.08);
+            border: 2px solid rgba(0, 243, 255, 0.4);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.15);
+            border-radius: 50%;
+            position: absolute;
+            touch-action: none;
+        }
 
-    .font-orbitron {
-        font-family: 'Orbitron', sans-serif;
-    }
+        .joystick-stick {
+            background: radial-gradient(circle, #00f3ff 0%, rgba(0, 243, 255, 0.4) 100%);
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 15px #00f3ff;
+            border-radius: 50%;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
 
-    .neon-glow-cyan {
-        box-shadow: 0 0 20px rgba(0, 243, 255, 0.4), inset 0 0 15px rgba(0, 243, 255, 0.2);
-        text-shadow: 0 0 8px rgba(0, 243, 255, 0.8);
-    }
+        .aim-joystick-base {
+            background: rgba(255, 0, 127, 0.08);
+            border: 2px solid rgba(255, 0, 127, 0.4);
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.15);
+        }
 
-    .glass-panel {
-        background: rgba(10, 12, 24, 0.88);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(0, 243, 255, 0.25);
-    }
+        .aim-joystick-stick {
+            background: radial-gradient(circle, #ff007f 0%, rgba(255, 0, 127, 0.4) 100%);
+            box-shadow: 0 0 15px #ff007f;
+        }
 
-    .joystick-base {
-        background: rgba(0, 243, 255, 0.08);
-        border: 2px solid rgba(0, 243, 255, 0.4);
-        box-shadow: 0 0 20px rgba(0, 243, 255, 0.15);
-        border-radius: 50%;
-        position: absolute;
-        touch-action: none;
-    }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: rgba(5, 5, 10, 0.5); }
+        ::-webkit-scrollbar-thumb { background: #00f3ff; border-radius: 3px; }
 
-    .joystick-stick {
-        background: radial-gradient(circle, #00f3ff 0%, rgba(0, 243, 255, 0.4) 100%);
-        border: 2px solid #ffffff;
-        box-shadow: 0 0 15px #00f3ff;
-        border-radius: 50%;
-        position: absolute;
-        transform: translate(-50%, -50%);
-        pointer-events: none;
-    }
-
-    .aim-joystick-base {
-        background: rgba(255, 0, 127, 0.08);
-        border: 2px solid rgba(255, 0, 127, 0.4);
-        box-shadow: 0 0 20px rgba(255, 0, 127, 0.15);
-    }
-
-    .aim-joystick-stick {
-        background: radial-gradient(circle, #ff007f 0%, rgba(255, 0, 127, 0.4) 100%);
-        box-shadow: 0 0 15px #ff007f;
-    }
-
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: rgba(5, 5, 10, 0.5); }
-    ::-webkit-scrollbar-thumb { background: #00f3ff; border-radius: 3px; }
-
-    canvas { display: block; touch-action: none; }
-</style>
+        canvas { display: block; touch-action: none; }
+    </style>
 </head>
 <body class="w-full h-full overflow-hidden select-none bg-slate-950">
 
@@ -1017,257 +988,120 @@ Super idol
             }
         }
 
-        class NetworkManager {
-            constructor(game) {
-                this.game = game;
-                this.isHost = false;
-                this.roomCode = null;
-                this.myUserId = null;
-                this.roomUnsub = null;
-                this.eventsUnsub = null;
-                this.processedEvents = new Set();
-                this.lastSyncTime = 0;
-                this.isAuthReady = false;
-                
-                this.initAuth();
+class NetworkManager {
+    constructor(game) {
+        this.game = game;
+        this.peer = null;
+        this.conn = null;
+        this.isHost = false;
+        this.roomCode = null;
+        this.myUserId = null;
+    }
+
+    initPeer(onReady) {
+        const generatedId = Math.random().toString(36).substring(2, 8).toUpperCase();
+        this.myUserId = generatedId;
+        this.peer = new Peer(generatedId, { debug: 1 });
+
+        this.peer.on('open', (id) => { if (onReady) onReady(id); });
+        this.peer.on('connection', (connection) => { 
+            this.conn = connection; 
+            this.setupConnectionListeners(); 
+        });
+        this.peer.on('error', (err) => { 
+            document.getElementById('connectionStatus').innerText = "Erro na rede. Tente de novo."; 
+        });
+    }
+
+    createRoom(onSuccess, onError) {
+        this.isHost = true;
+        this.initPeer((id) => { this.roomCode = id; onSuccess(id); });
+    }
+
+    joinRoom(code, onSuccess, onError) {
+        this.isHost = false;
+        this.roomCode = code.trim().toUpperCase();
+        this.initPeer((myId) => {
+            this.conn = this.peer.connect(this.roomCode, { reliable: false });
+            this.conn.on('open', () => { this.setupConnectionListeners(); onSuccess(); });
+            setTimeout(() => { if (!this.conn || !this.conn.open) onError("Sala não encontrada."); }, 5000);
+        });
+    }
+
+    setupConnectionListeners() {
+        this.conn.on('data', (data) => { this.handleIncomingMessage(data); });
+        this.conn.on('close', () => { this.game.addChatMessage('SYSTEM', 'O outro piloto desconectou.'); });
+        this.sendData({ type: 'JOIN', name: this.game.localPlayer.name, color: this.game.localPlayer.color });
+    }
+
+    sendData(data) { if (this.conn && this.conn.open) this.conn.send(data); }
+
+    sendPositionUpdate(player) {
+        this.sendData({
+            type: 'SYNC',
+            state: {
+                id: this.myUserId, name: player.name, color: player.color,
+                x: Math.round(player.x), y: Math.round(player.y),
+                vx: Math.round(player.vx * 10) / 10, vy: Math.round(player.vy * 10) / 10,
+                angle: Math.round(player.angle * 100) / 100, health: player.health,
+                shield: player.shield, score: player.score, kills: player.kills,
+                deaths: player.deaths, alive: player.alive, wepId: player.currentWeapon.id
             }
+        });
+    }
 
-            async initAuth() {
-                const { auth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } = window.FirebaseServices;
-                
-                return new Promise((resolve) => {
-                    onAuthStateChanged(auth, (user) => {
-                        if (user) {
-                            this.myUserId = user.uid;
-                            this.isAuthReady = true;
-                            resolve(user);
-                        }
-                    });
-
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        signInWithCustomToken(auth, __initial_auth_token).catch(() => signInAnonymously(auth));
-                    } else {
-                        signInAnonymously(auth).catch((err) => console.error("Auth error:", err));
-                    }
-                });
-            }
-
-            async ensureAuth() {
-                if (this.isAuthReady && this.myUserId) return this.myUserId;
-                const user = await this.initAuth();
-                return user.uid;
-            }
-
-            async createRoom(onSuccess, onError) {
-                try {
-                    await this.ensureAuth();
-                    const code = Math.random().toString(36).substring(2, 8).toUpperCase();
-                    this.roomCode = code;
-                    this.isHost = true;
-
-                    const { db, appId, doc, setDoc } = window.FirebaseServices;
-                    const roomRef = doc(db, 'artifacts', appId, 'public', 'data', 'rooms', code);
-
-                    await setDoc(roomRef, {
-                        code: code,
-                        hostId: this.myUserId,
-                        createdAt: Date.now(),
-                        players: {},
-                        status: 'active'
-                    });
-
-                    this.subscribeToRoom(code);
-                    this.subscribeToEvents(code);
-                    onSuccess(code);
-                } catch (err) {
-                    console.error("Erro ao criar sala Cloud:", err);
-                    onError("Falha ao criar sala. Tente novamente.");
-                }
-            }
-
-            async joinRoom(code, onSuccess, onError) {
-                try {
-                    await this.ensureAuth();
-                    const cleanCode = code.trim().toUpperCase();
-                    this.roomCode = cleanCode;
-                    this.isHost = false;
-
-                    const { db, appId, doc, getDoc } = window.FirebaseServices;
-                    const roomRef = doc(db, 'artifacts', appId, 'public', 'data', 'rooms', cleanCode);
-                    const roomSnap = await getDoc(roomRef);
-
-                    if (!roomSnap.exists()) {
-                        onError("Sala não encontrada! Verifique o código.");
-                        return;
-                    }
-
-                    this.subscribeToRoom(cleanCode);
-                    this.subscribeToEvents(cleanCode);
-                    onSuccess();
-                } catch (err) {
-                    console.error("Erro ao entrar na sala Cloud:", err);
-                    onError("Erro ao conectar à sala.");
-                }
-            }
-
-            subscribeToRoom(code) {
-                if (this.roomUnsub) this.roomUnsub();
-
-                const { db, appId, doc, onSnapshot } = window.FirebaseServices;
-                const roomRef = doc(db, 'artifacts', appId, 'public', 'data', 'rooms', code);
-
-                this.roomUnsub = onSnapshot(roomRef, (snapshot) => {
-                    if (!snapshot.exists()) return;
-                    const data = snapshot.data();
-                    if (data.players) {
-                        this.handlePlayersSync(data.players);
-                    }
-                }, (error) => {
-                    console.error("Erro no listener da sala:", error);
-                });
-            }
-
-            subscribeToEvents(code) {
-                if (this.eventsUnsub) this.eventsUnsub();
-
-                const { db, appId, collection, onSnapshot } = window.FirebaseServices;
-                const eventsRef = collection(db, 'artifacts', appId, 'public', 'data', 'room_events');
-
-                this.eventsUnsub = onSnapshot(eventsRef, (snapshot) => {
-                    snapshot.docChanges().forEach((change) => {
-                        if (change.type === 'added') {
-                            const evt = change.doc.data();
-                            const evtId = change.doc.id;
-
-                            if (evt.roomId === code && evt.senderId !== this.myUserId && !this.processedEvents.has(evtId)) {
-                                this.processedEvents.add(evtId);
-                                this.handleIncomingEvent(evt);
-                            }
-                        }
-                    });
-
-                    if (this.processedEvents.size > 150) {
-                        this.processedEvents.clear();
-                    }
-                }, (error) => {
-                    console.error("Erro no listener de eventos:", error);
-                });
-            }
-
-            handlePlayersSync(playersData) {
-                const activeIds = new Set(Object.keys(playersData));
-
-                Object.entries(playersData).forEach(([pId, pState]) => {
-                    if (pId === this.myUserId) return;
-
-                    let player = this.game.players.get(pId);
-                    if (!player) {
-                        player = this.game.addRemotePlayer(pId, pState.name || 'Piloto', pState.color || '#ff007f');
-                    }
-
-                    player.targetX = pState.x;
-                    player.targetY = pState.y;
-                    player.targetVx = pState.vx || 0;
-                    player.targetVy = pState.vy || 0;
-                    player.angle = pState.angle || 0;
-                    player.health = pState.health;
-                    player.shield = pState.shield;
-                    player.score = pState.score;
-                    player.kills = pState.kills;
-                    player.deaths = pState.deaths;
-                    player.alive = pState.alive;
-
-                    if (pState.wepId) {
-                        Object.values(WEAPONS).forEach(w => {
-                            if (w.id === pState.wepId) player.currentWeapon = w;
-                        });
-                    }
-                });
-            }
-
-            async sendPositionUpdate(player) {
-                if (!this.roomCode || !this.myUserId) return;
-
-                const { db, appId, doc, updateDoc } = window.FirebaseServices;
-                const roomRef = doc(db, 'artifacts', appId, 'public', 'data', 'rooms', this.roomCode);
-
-                const myData = {
-                    name: player.name,
-                    color: player.color,
-                    x: Math.round(player.x),
-                    y: Math.round(player.y),
-                    vx: Math.round(player.vx * 10) / 10,
-                    vy: Math.round(player.vy * 10) / 10,
-                    angle: Math.round(player.angle * 100) / 100,
-                    health: player.health,
-                    shield: player.shield,
-                    score: player.score,
-                    kills: player.kills,
-                    deaths: player.deaths,
-                    alive: player.alive,
-                    wepId: player.currentWeapon.id,
-                    lastSeen: Date.now()
-                };
-
-                try {
-                    await updateDoc(roomRef, {
-                        [`players.${this.myUserId}`]: myData
-                    });
-                } catch (e) {
-                    console.warn("Erro ao atualizar posição na nuvem:", e);
-                }
-            }
-
-            async sendEvent(type, payload = {}) {
-                if (!this.roomCode || !this.myUserId) return;
-
-                const { db, appId, collection, addDoc } = window.FirebaseServices;
-                const eventsRef = collection(db, 'artifacts', appId, 'public', 'data', 'room_events');
-
-                try {
-                    await addDoc(eventsRef, {
-                        roomId: this.roomCode,
-                        senderId: this.myUserId,
-                        type: type,
-                        payload: payload,
-                        timestamp: Date.now()
-                    });
-                } catch (e) {
-                    console.error("Erro ao enviar evento:", e);
-                }
-            }
-
-            handleIncomingEvent(evt) {
-                const { type, payload, senderId } = evt;
-
-                if (type === 'SHOOT') {
-                    const p = this.game.players.get(senderId);
-                    if (p) {
-                        this.game.spawnBulletsForPlayer(p, payload.wep, payload.angle, payload.bulletIds);
-                    }
-                } else if (type === 'HIT_EFFECT') {
-                    this.game.particleSys.emit(payload.x, payload.y, 12, '#ff007f', 2, 1);
-                    audio.playHit();
-                } else if (type === 'DASH') {
-                    const p = this.game.players.get(senderId);
-                    if (p) p.triggerDash(this.game.particleSys);
-                } else if (type === 'CHAT') {
-                    this.game.addChatMessage(payload.sender, payload.text);
-                }
-            }
-
-            broadcast(data) {
-                if (data.type === 'SHOOT') {
-                    this.sendEvent('SHOOT', { wep: data.wep, angle: data.angle, bulletIds: data.bulletIds });
-                } else if (data.type === 'DASH') {
-                    this.sendEvent('DASH', {});
-                } else if (data.type === 'CHAT') {
-                    this.sendEvent('CHAT', { sender: data.sender, text: data.text });
-                } else if (data.type === 'HIT') {
-                    this.sendEvent('HIT', { targetId: data.targetId, damage: data.damage, bulletId: data.bulletId });
-                }
-            }
+    handleIncomingMessage(msg) {
+        const { type, state } = msg;
+        if (type === 'JOIN') {
+            const rId = this.isHost ? this.conn.peer : this.roomCode;
+            this.game.addRemotePlayer(rId, msg.name, msg.color);
+            this.game.addChatMessage('SYSTEM', `${msg.name} entrou na arena!`);
+        } 
+        else if (type === 'SYNC' && state) {
+            const rId = state.id;
+            let player = this.game.players.get(rId);
+            if (!player) player = this.game.addRemotePlayer(rId, state.name, state.color);
+            player.targetX = state.x; player.targetY = state.y;
+            player.targetVx = state.vx; player.targetVy = state.vy;
+            player.angle = state.angle; player.health = state.health;
+            player.shield = state.shield; player.score = state.score;
+            player.kills = state.kills; player.deaths = state.deaths;
+            player.alive = state.alive;
+            Object.values(WEAPONS).forEach(w => { if (w.id === state.wepId) player.currentWeapon = w; });
+        } 
+        else if (type === 'SHOOT') {
+            const p = this.game.players.get(msg.id);
+            if (p) this.game.spawnBulletsForPlayer(p, msg.wep, msg.angle, msg.bulletIds);
+        } 
+        else if (type === 'DASH') {
+            const p = this.game.players.get(msg.id);
+            if (p) p.triggerDash(this.game.particleSys);
+        } 
+        else if (type === 'CHAT') {
+            this.game.addChatMessage(msg.sender, msg.text);
+        } 
+        else if (type === 'HIT_EFFECT') {
+            this.game.particleSys.emit(msg.x, msg.y, 12, '#ff007f', 2, 1);
+            audio.playHit();
         }
+        else if (type === 'HIT') {
+            const target = this.game.players.get(msg.targetId);
+            const attacker = this.game.players.get(msg.attackerId);
+            if (target) target.takeDamage(msg.damage, attacker, this.game.particleSys);
+        }
+    }
+
+    broadcast(data) {
+        if (data.type === 'SHOOT') this.sendData({ type: 'SHOOT', id: this.myUserId, wep: data.wep, angle: data.angle, bulletIds: data.bulletIds });
+        else if (data.type === 'DASH') this.sendData({ type: 'DASH', id: this.myUserId });
+        else if (data.type === 'CHAT') this.sendData({ type: 'CHAT', sender: data.sender, text: data.text });
+        else if (data.type === 'HIT') {
+            this.sendData({ type: 'HIT', targetId: data.targetId, damage: data.damage, attackerId: this.myUserId });
+            this.sendData({ type: 'HIT_EFFECT', x: data.x, y: data.y });
+        }
+    }
+}
+
 
         class GameEngine {
             constructor() {
@@ -1612,7 +1446,7 @@ Super idol
                 this.isOnline = true;
                 this.players.clear();
 
-                const myId = this.netManager.peer ? this.netManager.peer.id : `player_${Math.random().toString(36).substring(2, 8)}`;
+		  const myId = this.netManager.myUserId;
                 const sp = this.spawnPoints[Math.floor(Math.random() * this.spawnPoints.length)];
                 this.localPlayer = new Player(myId, playerName, playerColor, sp.x, sp.y);
                 this.players.set(myId, this.localPlayer);
